@@ -1,0 +1,48 @@
+*{
+	margin: 0 0;
+	padding: 0 0;
+}
+
+#block{
+	margin: 30px auto;
+	padding: 10px 20px;
+	padding-bottom: 20px;
+	width: 600px;
+	text-align: center;
+	
+	border: 1px solid #625B64;
+	-webkit-border-radius: 30px 30px;
+}
+
+h1{
+	margin-bottom: 10px;
+}
+
+#clients{
+	margin-top: 5px;
+	width: 400px;
+}
+
+#status{
+	background-color: #f7f7f7;
+	height: 200px;
+	width: 500px;
+	border: 1px solid #d8d8d8;
+	margin: 5px auto;
+	overflow: scroll;
+	text-align: left;
+	font-family: "Source Code Pro",monospace;
+	font-size: 13px;
+}
+
+.text{
+	margin: 10px auto;
+}
+
+.text_num{
+	display: inline-block;
+}
+
+#button_con{
+	margin-top: 20px;
+}

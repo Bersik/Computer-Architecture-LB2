@@ -7,7 +7,7 @@ onmessage = function (event) {
     importScripts("biginteger.js");
     //importScripts("AjaxClass.js");
   	xmlhttp = getXmlHttp();
-	xmlhttp.open('GET', '/client_connect', false);
+	xmlhttp.open('GET', '/worker', false);
 	xmlhttp.send(null);
 	if(xmlhttp.status == 200) {
 	  	param = JSON.parse(xmlhttp.responseText);
@@ -54,7 +54,8 @@ function isprime(n){
     if(n.compareAbs(1)==0) // 1 - не простое число
         return false;
     var d=BigInteger(2);
-    while(d.multiply(d).compareAbs(n)==-1){
+	while(d.multiply(d).compareAbs(BigInteger(1000000000))==-1){
+    //while(d.multiply(d).compareAbs(n)==-1){
         // если разделилось нацело, то составное
         if(n.remainder(d).compareAbs(0)==0) 
             return false;
@@ -64,7 +65,6 @@ function isprime(n){
     // если нет нетривиальных делителей, то простое
     return true;
 }
-
 
 function getXmlHttp(){
   var xmlhttp;
