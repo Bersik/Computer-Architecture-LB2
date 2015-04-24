@@ -1,11 +1,9 @@
 from app import app
 from flask import jsonify, request, render_template
-import Queue
 
 from p_server import PServer
 
 serv = PServer()
-queue = Queue.Queue()
 
 @app.route('/')
 @app.route('/index')
@@ -26,12 +24,35 @@ def server():
         return jsonify({})
     return render_template("server.html", search=serv.search)
 
+
 @app.route('/client',methods=['GET'])
 def client():
     return render_template("client.html")
 
+
 @app.route('/worker',methods=['GET'])
 def worker():
-    id = serv.add_client(request.remote_addr)
-    num = serv.get_num(id)
-    return jsonify({"num":str(num),"id":id})
+    parameters = request.args
+
+    if parameters.get("type") == "start":
+        id = serv.add_client(request.remote_addr)
+        return str(id)
+
+    if parameters.get("type") == "get_work" and parameters.get("id"):
+        if serv.search:
+            return jsonify({"num":serv.get_work(request.args.get("id")),"count_num":serv.count_num,"session":serv.session})
+        else:
+            return "error"
+
+    if parameters.get("type") == "find" and parameters.get("session"):
+        if serv.search and serv.session == parameters.get("session"):
+            serv.search = False
+            serv.prime = request.args.get("prime")
+            return "ok"
+        else:
+            return "error"
+
+    if parameters.get("type") == "check":
+        if serv.search and request.args.get("session") == serv.session:
+            return "ok"
+        return "error"

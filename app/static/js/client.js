@@ -22,18 +22,32 @@ function launch_worker(){
     worker.onmessage = function (event) {
     	var data = event.data;
     	switch (data.messageType){
+    		case 'connectError':
+    			add_status("Помилка підключення...");
+    			break;
     		case 'start':
     			obj_id.innerHTML = data.id;
-    			obj_num.innerHTML = data.num;
-    			add_status("Запущено: num=" +data.num.toString());
+    			add_status("Підлючився. Мій id - "+data.id+".");
+    			document.title = "Client "+ data.id
     			change_content_start();
     			break;
+    		case 'get_work':
+    			if (data.work == true){
+    				add_status("Запустив пошук. Початкове число - " +data.num+". Кількість чисел - " +data.count_num+ ". Сессія - "+data.session+".");
+    			}
+    			else{
+    				add_status("Роботи немає. Очікую...");
+    			}
+    			break;
     		case 'progress':
-    			add_status(data.current_num.toString()+" checking...");
+    			add_status("Перевіряю число "+data.current_num+". Зараз ділю на "+data.iteration+".");
     			break;
     		case 'result':
-    			add_status("Знайдено просте число: " + data.data);
+    			add_status("Я знайшов просте число! Це " + data.current_num+".");
     			change_content_stop();
+    			break;
+    		case 'test':
+    			add_status("Тест! val="+data.val);
     			break;
     		default:
     			break;

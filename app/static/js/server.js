@@ -23,7 +23,6 @@ function getXmlHttp(){
 
 function search(){
 	if (obj_button.innerHTML === "Пошук"){
-		
 		xmlhttp.open('GET', '/server?num='+obj_number.value, false);
 		xmlhttp.send(null);
 		if(xmlhttp.status == 200) {
