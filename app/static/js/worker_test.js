@@ -10,20 +10,9 @@ var connect_timer;
 var xmlhttp;
 
 onmessage = function (event) {
-	var data = event.data;
-	switch (data){
-		case 'start':
-			importScripts("biginteger.js");
-    		xmlhttp = getXmlHttp();
-    		setTimeout(start,1000);
-			break;
-		case 'stop':
-			send_test("stttttttttttop");
-			break;
-		default:
-			break;
-	}
-    
+    importScripts("biginteger.js");
+    xmlhttp = getXmlHttp();
+    start();
 };
 
 

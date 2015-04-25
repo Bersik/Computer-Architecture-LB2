@@ -16,6 +16,7 @@ def server():
         serv.set_num(request.args.get('num'))
         return jsonify({})
     if request.args.get("update"):
+        serv.check_clients()
         clients = serv.get_clients()
         json = jsonify(clients)
         return json
@@ -53,6 +54,16 @@ def worker():
             return "error"
 
     if parameters.get("type") == "check":
-        if serv.search and request.args.get("session") == serv.session:
+        if serv.search and request.args.get("session") == serv.session and parameters.get("id"):
             return "ok"
         return "error"
+
+    if parameters.get("type") == "online":
+        serv.check_client(parameters.get("id"))
+        return "ok"
+
+    if parameters.get("type") == "stop":
+        serv.stop_client(parameters.get("id"))
+        return "ok"
+    return "error"
+

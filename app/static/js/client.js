@@ -2,6 +2,10 @@ var obj_button;
 var obj_id;
 var obj_num;
 var obj_status;
+var timer_online;
+var xmlhttp;
+var id;
+var session;
 
 var worker;
 var worked_working = false;
@@ -27,6 +31,7 @@ function launch_worker(){
     			break;
     		case 'start':
     			obj_id.innerHTML = data.id;
+    			id=data.id;
     			add_status("Підлючився. Мій id - "+data.id+".");
     			document.title = "Client "+ data.id
     			change_content_start();
@@ -44,7 +49,6 @@ function launch_worker(){
     			break;
     		case 'result':
     			add_status("Я знайшов просте число! Це " + data.current_num+".");
-    			change_content_stop();
     			break;
     		case 'test':
     			add_status("Тест! val="+data.val);
@@ -60,12 +64,15 @@ function change_content_start(){
 	obj_button.disabled = false;
 	worked_working = true;
 	obj_button.innerHTML="Відключитись";
+	timer_online = setInterval(online,5000);
+	online();
 }
 
 function change_content_stop(){
 	obj_button.disabled = false;
 	worked_working = false;
 	obj_button.innerHTML="Підключитись";
+	clearInterval(timer_online);
 }
 
 function button_con(){
@@ -77,9 +84,12 @@ function button_con(){
 		launch_worker();
 		setTimeout(function (){ obj_button.disabled = false; },5)
 	}else{
-		add_status("Зупинено");
 		worker.terminate();
+		xmlhttp = new XMLHttpRequest();
+		xmlhttp.open('GET', '/worker?type=stop&id='+id, true);
+		xmlhttp.send(null);
 		change_content_stop();
+		add_status("Зупинено");
 	}
 }
 
@@ -106,4 +116,10 @@ window.onload=function(){
 	obj_id = document.getElementById("id");
 	obj_num = document.getElementById("num");
 	obj_status = document.getElementById("status");
+}
+
+function online(){
+	xmlhttp = new XMLHttpRequest();
+	xmlhttp.open('GET', '/worker?type=online&id='+id, true);
+	xmlhttp.send(null);
 }

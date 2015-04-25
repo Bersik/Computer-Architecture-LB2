@@ -23,31 +23,40 @@ function getXmlHttp(){
 
 function search(){
 	if (obj_button.innerHTML === "Пошук"){
-		xmlhttp.open('GET', '/server?num='+obj_number.value, false);
+		xmlhttp.open('GET', '/server?num='+obj_number.value, true);
+		xmlhttp.onreadystatechange = function(){
+			if ((xmlhttp.readyState == 4) && (xmlhttp.status == 200)) {
+       			obj_button.innerHTML = "Зупинити";
+  			}
+		};
 		xmlhttp.send(null);
-		if(xmlhttp.status == 200) {
-			obj_button.innerHTML = "Зупинити";
-		}
 	}else{
-		xmlhttp.open('GET', '/server?stop=true', false);
+		xmlhttp.open('GET', '/server?stop=true', true);
 		xmlhttp.send(null);
-		if(xmlhttp.status == 200) {
-			obj_button.innerHTML = "Пошук";
-		}
+		xmlhttp.onreadystatechange = function(){
+			if ((xmlhttp.readyState == 4) && (xmlhttp.status == 200)) {
+       			obj_button.innerHTML = "Пошук";
+  			}
+		};
 	}
 }
 
 function update(){
-	xmlhttp.open('GET', '/server?update=true', false);
+	xmlhttp.open('GET', '/server?update=true', true);
+	xmlhttp.onreadystatechange = function(){
+		if ((xmlhttp.readyState == 4) && (xmlhttp.status == 200)) {
+       		clients = JSON.parse(xmlhttp.responseText);
+			obj_clients.options.length = 0;
+			for (var client in clients){
+				client_str = client + ") IP: " + clients[client].ip
+				if (clients[client].start_num){
+					client_str+="; num: " +clients[client].start_num
+				}
+				obj_clients.options[obj_clients.options.length] = new Option(client_str,client);
+			}
+  		}
+	};
 	xmlhttp.send(null);
-	if(xmlhttp.status == 200) {
-		clients = JSON.parse(xmlhttp.responseText);
-		obj_clients.options.length = 0;
-		for (var client in clients){
-			client_str = client + ") IP: " + clients[client].ip
-			obj_clients.options[obj_clients.options.length] = new Option(client_str,client);
-		}
-	}
 }
 
 window.onload=function(){	
@@ -56,6 +65,6 @@ window.onload=function(){
 	obj_status = document.getElementById("status");
 	obj_clients = document.getElementById("clients");
 	xmlhttp = getXmlHttp();
-	setInterval("update();",5000)
+	setInterval("update();",5000);
 	update();
 }
