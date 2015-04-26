@@ -16,7 +16,7 @@ def index():
 def server():
     if request.args.get("num"):
         serv.set_num(request.args.get('num'))
-        return jsonify({})
+        return "ok"
     if request.args.get("update"):
         serv.check_clients()
         res = {"clients": serv.get_clients(), "log": serv.log}

@@ -80,7 +80,7 @@ function send_test(val){
 	postMessage({
 		"messageType":"test",
 		"val":val
-	});	
+	});
 }
 
 function work(){
