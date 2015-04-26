@@ -19,6 +19,7 @@ function check_support_worker(){
 
 function add_status(str){
 	obj_status.innerHTML += str+"<br>";
+	obj_status.scrollTop = obj_status.scrollHeight;
 }
 
 function launch_worker(){
@@ -33,19 +34,27 @@ function launch_worker(){
     			obj_id.innerHTML = data.id;
     			id=data.id;
     			add_status("Підлючився. Мій id - "+data.id+".");
-    			document.title = "Client "+ data.id
+    			document.title = "Клієнт №"+ data.id
     			change_content_start();
     			break;
     		case 'get_work':
     			if (data.work == true){
-    				add_status("Запустив пошук. Початкове число - " +data.num+". Кількість чисел - " +data.count_num+ ". Сессія - "+data.session+".");
+    				obj_num.innerHTML = data.num_start;
+    				add_status("Запустив пошук. Початкове число - " +data.num_start+". Кінцеве число - " +data.num_end+ ". Сессія - "+data.session+".");
     			}
     			else{
     				add_status("Роботи немає. Очікую...");
     			}
     			break;
+    		case 'began_to_check':
+    			add_status("Починаю перевіряти число "+data.current_num+" ("+data.current_i+"/"+data.len+").");
+    			break;
     		case 'progress':
-    			add_status("Перевіряю число "+data.current_num+". Зараз ділю на "+data.iteration+".");
+    			if (data.not_prime){
+    				add_status("Число "+data.current_num+" складене. Ділиться на "+data.iteration+".");
+    			}else{
+    				add_status("Продовжую перевіряти число "+data.current_num+". Зараз ділю на "+data.iteration+".");
+    			}
     			break;
     		case 'result':
     			add_status("Я знайшов просте число! Це " + data.current_num+".");
@@ -93,25 +102,7 @@ function button_con(){
 	}
 }
 
-function test(){
-	var val =  BigInteger("15415648545184489789789788");
-	var val2 =  BigInteger("154156485451844897897897");
-	var val5 =  BigInteger("154156485451844897897896");
-	var val3 = BigInteger(2);
-
-	var d = 2;
-	//alert(val2);
-	//alert(val2.add(val5));
-	//alert(val2);
-	//alert(val4.compareAbs(val4));
-	//alert(val4);
-	//alert(val2.remainder(val5));
-	//alert(val2.add(1));
-	//alert(val.compareAbs("15415648545184489789789788"));
-}
-
 window.onload=function(){	
-	test();
 	obj_button = document.getElementById("button_con");
 	obj_id = document.getElementById("id");
 	obj_num = document.getElementById("num");

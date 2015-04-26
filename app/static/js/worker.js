@@ -1,7 +1,7 @@
 var xmlhttp;
 var id;
-var num;
-var count_num;
+var start_num;
+var end_num;
 var session;
 
 var val;
@@ -14,16 +14,12 @@ onmessage = function (event) {
 	switch (data){
 		case 'start':
 			importScripts("biginteger.js");
-    		xmlhttp = getXmlHttp();
-    		setTimeout(start,1000);
-			break;
-		case 'stop':
-			send_test("stttttttttttop");
+			xmlhttp = getXmlHttp();
+			setTimeout(start,1000);
 			break;
 		default:
 			break;
 	}
-    
 };
 
 
@@ -37,9 +33,9 @@ function start(){
 	else{
 		id = xmlhttp.responseText;
 		postMessage({
-				"messageType":"start",
-				"id":id,
-			});
+			"messageType":"start",
+			"id":id,
+		});
 		get_work();
 	}
 }
@@ -51,18 +47,18 @@ function get_work(){
 	if (xmlhttp.status == 200){
 		if (xmlhttp.responseText != 'error'){
 			param = JSON.parse(xmlhttp.responseText);
-			num = param["num"]
-			count_num = param["count_num"]
+			start_num = BigInteger(param["num"])
+			end_num = BigInteger(start_num.add(BigInteger(param["count_num"]-1)))
 			session = param["session"]
 			postMessage({
 				"messageType":"get_work",
 				"work":true,
-				"num":num,
-				"count_num":count_num,
+				"num_start":param["num"],
+				"num_end":BigInteger.toString(end_num),
 				"session":session,
 			});
-	    	work();
-	    	return;
+			work();
+			return;
 		}
 		else{
 			postMessage({
@@ -74,174 +70,115 @@ function get_work(){
 	setTimeout(get_work, 5000);
 }
 
-
 function send_connection_error(){
 	postMessage({
-				"messageType":"connectError"
-			});
+		"messageType":"connectError"
+	});
 }
 
 function send_test(val){
 	postMessage({
-				"messageType":"test",
-				"val":val
-			});	
+		"messageType":"test",
+		"val":val
+	});	
 }
 
 function work(){
-	var current_num = BigInteger(num);
-	var end_num = current_num.add(count_num);
 	var send_count_iterations = BigInteger("1000000");
 	var numbers =[];
-
-	for(var current_num = BigInteger(num);current_num.compare(end_num)==-1;){
+	var current_num;
+	for(current_num=start_num;current_num.compare(end_num)==-1;){
 		numbers.push(current_num);
 		current_num = current_num.add(2);
 	}
 	
-	//якщо число досить велике, то ділим порціями по send_count_iterations елементів
-	if (end_num.quotient(2).compare(send_count_iterations)==1){
-		var BigTwo = BigInteger(2);
-		for(var i=0;i<numbers.length;i++){
-			var k = BigInteger(3);
-			var k_end;
-			var current_num = numbers[i];
-			var not_prime=false;
+	if (current_num.compare(BigInteger(9007199254740992))==-1){
+		send_count_iterations = BigInteger(Math.sqrt(BigInteger.toString(current_num)))
+	}
 
-
-			do{
-				k_end = k.add(send_count_iterations);
-				while(k.compare(k_end)==-1){
-					if(current_num.remainder(k).compareAbs(0)==0){
-						not_prime=true
-						break;
-					}
-					k = k.add(BigTwo);	
-				}
-				postMessage({
-							"messageType":"progress",
-							"current_num":current_num.toString(),
-							"iteration":k.toString()
-						});
-				xmlhttp.open('GET', '/worker?type=check&session='+session+'&id='+id, false);
-				xmlhttp.send(null);
-				if (xmlhttp.status == 200){
-					if (xmlhttp.responseText != "ok"){
-						setTimeout(get_work,2000);
-						return;
-					}
-				}else
-					send_connection_error();
-				k=k_end;
-				if (not_prime)
+	var BigTwo = BigInteger(2);
+	for(var i=0;i<numbers.length;i++){
+		var k = BigInteger(3);
+		var k_end;
+		var current_num = numbers[i];
+		var not_prime=false;
+		postMessage({
+			"messageType":"began_to_check",
+			"current_num":current_num.toString(),
+			"current_i":i+1,
+			"len":numbers.length
+		});
+		do{
+			k_end = k.add(send_count_iterations);
+			while(k.compare(k_end)==-1){
+				if(current_num.remainder(k).compareAbs(0)==0){
+					not_prime=true
 					break;
-			}while(k.multiply(k).compare(current_num)!=1)
-
-			if (not_prime == false){
-			//знайшли
-						postMessage({
-							"messageType":"result",
-							"current_num":current_num.toString(),
-						});
-
-						xmlhttp.open('GET', '/worker?type=find&session='+session+'&prime='+current_num.toString(), false);
-						xmlhttp.send(null);
-						if (xmlhttp.status == 200)
-							setTimeout(get_work,5000);
-						else 
-							send_connection_error();
-						return;
-}
-		}
-		setTimeout(get_work,2000);
-	}
-}
-
-
-function check(){
-	xmlhttp.open('GET', '/worker?type=check', false);
-	xmlhttp.send(null);
-	if(xmlhttp.status == 200) {
-	  	param = JSON.parse(xmlhttp.responseText);
-	  	if (param["search"] == true){
-	  		clearInterval(check_timer);
-	  		var num = BigInteger(param["num"])
-	  		var count_op = BigInteger(param["count_op"])
-
-	  		
-	  		val = BigInteger(param["num"]);
-			id = param["id"];
-			if (val.remainder(2).compareAbs(0)==0)
-				pos = val.add(1);
-			else
-				pos = val.add(2);
+				}
+				k = k.add(BigTwo);	
+			}
 			postMessage({
-				"messageType":"start",
-				"id":id,
-				"num":BigInteger.toString(val),
-				"current_num":BigInteger.toString(pos)
+				"messageType":"progress",
+				"current_num":current_num.toString(),
+				"iteration":k.toString(),
+				"not_prime":not_prime
 			});
-			running = true;
-	    	exit_(f());
-	    	set_interval_check();
-	  	}
-		
-	}	
-}
+			xmlhttp.open('GET', '/worker?type=check&session='+session+
+				'&id='+id+
+				"&i="+(i+1)+
+				"&count="+numbers.length+
+				"&current_num="+current_num.toString()+
+				"&not_prime="+not_prime+
+				"&iteration="+k.toString(),
+				false);
+			xmlhttp.send(null);
+			if (xmlhttp.status == 200){
+				if (xmlhttp.responseText != "ok"){
+					setTimeout(get_work,2000);
+					return;
+				}
+			}else
+			send_connection_error();
+			k=k_end;
+			if (not_prime)
+				break;
+		}while(k.multiply(k).compare(current_num)!=1)
 
+		if (not_prime == false){
+			//знайшли
+			postMessage({
+				"messageType":"result",
+				"current_num":current_num.toString(),
+			});
 
-function exit_(num){
-	postMessage({"messageType":"result","data":BigInteger.toString(num)});
-	close();
-}
-
-function progress(running){
-	postMessage({
-        		"messageType":"progress",
-        		"current_num":BigInteger.toString(pos)
-    });
-}
-
-function f(){
-	while(true){
-		progress(running);
-		if (isprime(pos)==true){
-			return pos;
+			xmlhttp.open('GET', '/worker?type=find&id='+id+'&session='+session+'&prime='+current_num.toString(), false);
+			xmlhttp.send(null);
+			if (xmlhttp.status == 200)
+				setTimeout(get_work,5000);
+			else 
+				send_connection_error();
+			return;
 		}
-		pos = pos.add(2);
 	}
+	setTimeout(get_work,2000);
 }
 
-function isprime(n){
-    if(n.compareAbs(1)==0) // 1 - не простое число
-        return false;
-    var d=BigInteger(2);
-    while(d.multiply(d).compareAbs(n)==-1){
-        // если разделилось нацело, то составное
-        if(n.remainder(d).compareAbs(0)==0) 
-            return false;
-        
-        d=d.add(1);
-    }
-    // если нет нетривиальных делителей, то простое
-    return true;
-}
 
 function getXmlHttp(){
 	var xmlhttp;
- 	try {
-    	xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
-  	} catch (e) {
-	    try {
-      		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    	} catch (E) {
-      		xmlhttp = false;
-    	}
-  	}
-  	if (!xmlhttp && typeof XMLHttpRequest!='undefined') {
-	    xmlhttp = new XMLHttpRequest();
-  	}
-  	return xmlhttp;
+	try {
+		xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+	} catch (e) {
+		try {
+			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		} catch (E) {
+			xmlhttp = false;
+		}
+	}
+	if (!xmlhttp && typeof XMLHttpRequest!='undefined') {
+		xmlhttp = new XMLHttpRequest();
+	}
+	return xmlhttp;
 }
 
 function setParameters(dict){

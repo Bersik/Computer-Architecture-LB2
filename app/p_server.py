@@ -1,20 +1,23 @@
-from time import sleep
+# -*- coding: utf-8 -*-
 import random
 from datetime import datetime
 
-class PServer():
 
+class PServer():
     def __init__(self):
         self.clients = dict()
         self.num = 0
         self.current_num = 0
         self.search = False
-        self.count_op = 1000000
         self.count_num = 20
         self.prime = 0
         self.session = 0
         self.timeout = 20
         self.stopped = []
+        self.log = []
+
+    def add_log(self, info):
+        self.log.append("[" + str(datetime.now()) + "]: " + info)
 
     def set_num(self, num):
         self.num = long(num)
@@ -24,52 +27,71 @@ class PServer():
         self.search = True
         self.prime = 0
         self.session = "%x" % random.getrandbits(32)
-        print self.session
-        print self.current_num
-        print "new_num=" + str(self.num)
+        self.stopped = []
+
+        self.add_log(u"Задане число: %s" % num)
+        self.add_log(u"Сессія: %s" % self.session)
 
     def add_client(self, ip):
         id = 1
         while self.clients.get(id):
             id += 1
-        self.clients[id] = {"ip":ip,"update":datetime.now()}
-        print "connected client: " + str(id) + ") " + str(ip)
+        self.clients[id] = {"ip": ip, "update": datetime.now()}
+        self.add_log(u"Підключився новий клієнт: id:%d; ip:%s" % (id, str(ip)))
         return id
 
-    def delete_client(self, id):
-        del self.clients[id]
-        return id
-
-    def get_num(self, id):
-        return self.num
+    def find(self, id, prime):
+        self.search = False
+        self.prime = prime
+        self.add_log(u"Клієнт №%d знайшов просте число: %s" % (id, prime))
 
     def get_clients(self):
         return self.clients
 
     def get_work(self, id):
         id = int(id)
-        if len(self.stopped)>0:
-            self.clients[id]["start_num"]=self.stopped[0]
+        if len(self.stopped) > 0:
+            self.clients[id]["start_num"] = self.stopped[0]
+            self.add_log(u"Клієнт №%d отримав відмінену задачу. Початкове число: %s" % (id, self.stopped[0]))
             self.stopped.remove(self.stopped[0])
         else:
-            self.clients[id]["start_num"]=self.current_num
+            self.clients[id]["start_num"] = str(self.current_num)
+            self.add_log(u"Клієнт №%d отримав задачу. Початкове число: %s" % (id, str(self.current_num)))
             self.current_num = self.current_num + self.count_num
-        return self.clients[id]["start_num"]
+        return str(self.clients[id]["start_num"])
 
     def check_clients(self):
         if len(self.clients) > 0:
             for key in self.clients.keys():
-                print "Client id=" + str(key) + "  second=" + str((datetime.now() - self.clients[key]["update"]).seconds)
+                print "Client id=" + str(key) + "  second=" + str(
+                    (datetime.now() - self.clients[key]["update"]).seconds)
                 if (datetime.now() - self.clients[key]["update"]).seconds > self.timeout:
-                    if (self.clients[key].get("start_num")):
-                        self.stopped.append(self.clients[key]["start_num"])
-                    del self.clients[key]
+                    self.stop_client(key)
 
-    def check_client(self, id):
-        self.clients[int(id)]["update"] = datetime.now()
+    def online_client(self, id):
+        id = int(id)
+        if self.clients.get(id):
+            self.clients[id]["update"] = datetime.now()
+            return True
+        return False
+
+    def check_client(self, parameters):
+        id = int(parameters.get("id"))
+        i = parameters.get("i")
+        count = parameters.get("count")
+        current_num = parameters.get("current_num")
+        iteration = parameters.get("iteration")
+
+        if parameters.get("not_prime") == "true":
+            self.add_log(u"Клієнт №%d перевірив число %s (%s/%s). Воно складене, ділиться на %s" % (
+                id, current_num, i, count, iteration))
+        else:
+            self.add_log(
+                u"Клієнт №%d перевіряє число %s (%s/%s). Зараз ділить на %s" % (id, current_num, i, count, iteration))
 
     def stop_client(self, id):
-        id=int(id)
+        id = int(id)
         if (self.clients[id].get("start_num")):
             self.stopped.append(self.clients[id]["start_num"])
         del self.clients[id]
+        self.add_log(u"Клієнт №%d відключився. " % id)

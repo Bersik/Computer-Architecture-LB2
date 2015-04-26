@@ -21,6 +21,7 @@ function getXmlHttp(){
   return xmlhttp;
 }
 
+
 function search(){
 	if (obj_button.innerHTML === "Пошук"){
 		xmlhttp.open('GET', '/server?num='+obj_number.value, true);
@@ -45,14 +46,24 @@ function update(){
 	xmlhttp.open('GET', '/server?update=true', true);
 	xmlhttp.onreadystatechange = function(){
 		if ((xmlhttp.readyState == 4) && (xmlhttp.status == 200)) {
-       		clients = JSON.parse(xmlhttp.responseText);
+			parameters = JSON.parse(xmlhttp.responseText);
+       		clients = parameters.clients
 			obj_clients.options.length = 0;
 			for (var client in clients){
 				client_str = client + ") IP: " + clients[client].ip
 				if (clients[client].start_num){
-					client_str+="; num: " +clients[client].start_num
+					client_str+="; початкове число: " +clients[client].start_num
 				}
 				obj_clients.options[obj_clients.options.length] = new Option(client_str,client);
+			}
+			log = parameters.log
+			obj_status.innerHTML = "";
+			for(var i in log){
+				obj_status.innerHTML += log[i] + "<br/>";
+			}
+			obj_status.scrollTop = obj_status.scrollHeight;
+			if (parameters.prime != undefined){
+				obj_button.innerHTML = "Пошук";
 			}
   		}
 	};
@@ -67,4 +78,9 @@ window.onload=function(){
 	xmlhttp = getXmlHttp();
 	setInterval("update();",5000);
 	update();
+}
+
+function add_status(str){
+	obj_status.innerHTML += str+"<br>";
+	obj_status.scrollTop = obj_status.scrollHeight;
 }
