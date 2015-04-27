@@ -15,6 +15,7 @@ class PServer():
         self.timeout = 20
         self.stopped = []
         self.log = []
+        self.time = 0
 
     def add_log(self, info):
         self.log.append("[" + str(datetime.now()) + "]: " + info)
@@ -28,7 +29,7 @@ class PServer():
         self.prime = 0
         self.session = "%x" % random.getrandbits(32)
         self.stopped = []
-
+        self.time = datetime.now()
         self.add_log(u"Задане число: %s" % num)
         self.add_log(u"Сессія: %s" % self.session)
 
@@ -44,6 +45,8 @@ class PServer():
         self.search = False
         self.prime = prime
         self.add_log(u"Клієнт №%d знайшов просте число: %s" % (id, prime))
+        self.add_log(u"Час виконання: %s" % str(datetime.now() - self.time))
+        self.time = 0
 
     def get_clients(self):
         return self.clients
@@ -95,3 +98,10 @@ class PServer():
             self.stopped.append(self.clients[id]["start_num"])
         del self.clients[id]
         self.add_log(u"Клієнт №%d відключився. " % id)
+
+    def server_update(self):
+        self.check_clients()
+        res = {"clients": self.clients, "log": self.log}
+        if self.prime != 0:
+            res["prime"] = self.prime
+        return res

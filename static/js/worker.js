@@ -15,7 +15,7 @@ onmessage = function (event) {
 		case 'start':
 			importScripts("biginteger.js");
 			xmlhttp = getXmlHttp();
-			setTimeout(start,1000);
+			setTimeout(start,100);
 			break;
 		default:
 			break;
@@ -45,7 +45,7 @@ function get_work(){
 	xmlhttp.open('GET', '/worker?type=get_work&id='+id, false);
 	xmlhttp.send(null);
 	if (xmlhttp.status == 200){
-		if (xmlhttp.responseText != 'error'){
+		if (xmlhttp.responseText != 'no_work'){
 			param = JSON.parse(xmlhttp.responseText);
 			start_num = BigInteger(param["num"])
 			end_num = BigInteger(start_num.add(BigInteger(param["count_num"]-1)))
@@ -84,7 +84,7 @@ function send_test(val){
 }
 
 function work(){
-	var send_count_iterations = BigInteger("1000000");
+	var send_count_iterations = BigInteger("100000");
 	var numbers =[];
 	var current_num;
 	for(current_num=start_num;current_num.compare(end_num)==-1;){
@@ -92,7 +92,7 @@ function work(){
 		current_num = current_num.add(2);
 	}
 	
-	if (current_num.compare(BigInteger(9007199254740992))==-1){
+	if (current_num.compare(BigInteger(9007199254))==-1){
 		send_count_iterations = BigInteger(Math.sqrt(BigInteger.toString(current_num)))
 	}
 
@@ -115,7 +115,7 @@ function work(){
 					not_prime=true
 					break;
 				}
-				k = k.add(BigTwo);	
+				k = k.add(BigTwo);
 			}
 			postMessage({
 				"messageType":"progress",
@@ -145,7 +145,6 @@ function work(){
 		}while(k.multiply(k).compare(current_num)!=1)
 
 		if (not_prime == false){
-			//знайшли
 			postMessage({
 				"messageType":"result",
 				"current_num":current_num.toString(),

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-from app import views,app
+import views
 import unittest
 import json
 import tempfile
@@ -23,21 +23,35 @@ class FlaskrTestCase(unittest.TestCase):
         self.assertEquals('2',self.app.get('/worker?type=start').data)
 
         #перш ніж брати роботу, треба запустити сервер
-        self.assertEquals('error',self.app.get('/worker?type=get_work&id=2').data)
+        self.assertEquals('no_work',self.app.get('/worker?type=get_work&id=2').data)
 
         #запускаємо сервер
         self.assertEquals('ok',self.app.get('/server?num=500000').data)
 
-        #беремо роботу
-        rv = self.app.get('/worker?type=get_work&id=1')
+        #беремо роботу1
+        rv = self.send('/worker',{"type":"get_work","id":1})
         param = json.loads(rv.data)
         self.assertEquals(param["num"],"500001")
         self.assertEquals(param["count_num"],20)
-
         session = param["session"]
+        #беремо роботу2
+        rv = self.send('/worker',{"type":"get_work","id":2})
+        param = json.loads(rv.data)
+        self.assertEquals(param["num"],"500021")
+        self.assertEquals(param["count_num"],20)
+        self.assertEquals(session,param["session"])
+        rv = self.send("/worker",{"type":"check","id":1,"session":session})
+        self.assertEquals("ok",rv.data)
+        rv = self.send("/worker",{"type":"online","id":1})
 
-        #assert 'error' in self.app.get('/worker?type=get_work&id=2')
-        #print rv.data
+
+    def send(self,url,param):
+
+        link = url + '?'
+        for i in param:
+            link += str(i)+"="+str(param[i])+"&"
+        print link[:-1]
+        return self.app.get(link[:-1])
 
 if __name__ == '__main__':
     unittest.main()

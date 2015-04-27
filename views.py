@@ -1,10 +1,11 @@
-from app import app
-from flask import jsonify, request, render_template
+# -*- coding: utf-8 -*-
+from flask import Flask, jsonify, request, render_template
 
 from p_server import PServer
 
-serv = PServer()
+app = Flask(__name__)
 
+serv = PServer()
 
 @app.route('/')
 @app.route('/index')
@@ -14,16 +15,15 @@ def index():
 
 @app.route('/server', methods=['GET'])
 def server():
+
     if request.args.get("num"):
         serv.set_num(request.args.get('num'))
         return "ok"
+
     if request.args.get("update"):
-        serv.check_clients()
-        res = {"clients": serv.get_clients(), "log": serv.log}
-        if serv.prime != 0:
-            res["prime"] = serv.prime
-        json = jsonify(res)
-        return json
+        param = serv.server_update()
+        return jsonify(param)
+
     if request.args.get("stop"):
         serv.search = False
         return "ok"
@@ -36,7 +36,28 @@ def client():
 
 
 @app.route('/worker', methods=['GET'])
+
 def worker():
+    """
+    Обробка запитів від worker.
+    :param GET type:
+        start - додаємо клієнта
+        get_work - дати роботу клієнту,
+            якщо пошук запущений
+                :return поточне число, к-сть чисел, сессія;
+            інакше
+                :return no_work
+        find - клієнт знайшов просте число; якщо сесії співпали, зупиняємо пошук
+            якщо сервер працював і сесії співпадають
+                :return ok
+            інакше
+                :return error
+        check - додаємо клієнта
+        start - додаємо клієнта
+        start - додаємо клієнта
+
+    :return:
+    """
     parameters = request.args
 
     if parameters.get("type") == "start":
@@ -45,10 +66,14 @@ def worker():
 
     if parameters.get("type") == "get_work" and parameters.get("id"):
         if serv.search:
-            return jsonify(
-                {"num": serv.get_work(request.args.get("id")), "count_num": serv.count_num, "session": serv.session})
+            param = {
+                "num": serv.get_work(request.args.get("id")),
+                "count_num": serv.count_num,
+                "session": serv.session
+            }
+            return jsonify(param)
         else:
-            return "error"
+            return "no_work"
 
     if parameters.get("type") == "find" and parameters.get("session"):
         if serv.search and serv.session == parameters.get("session"):
@@ -71,5 +96,9 @@ def worker():
     if parameters.get("type") == "stop":
         serv.stop_client(parameters.get("id"))
         return "ok"
+
     return "error"
 
+if __name__ == '__main__':
+    #app.run(debug=True,host="192.168.0.103",port=80)
+    app.run(debug=True)

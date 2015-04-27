@@ -18,7 +18,7 @@ function check_support_worker(){
 }
 
 function add_status(str){
-	obj_status.innerHTML += str+"<br>";
+	obj_status.innerHTML += str+"<br/>";
 	obj_status.scrollTop = obj_status.scrollHeight;
 }
 
