@@ -88,7 +88,7 @@ function send_test(val){
 }
 
 function work(param){
-	var send_count_iterations = BigInteger("100000");
+	var send_count_iterations = BigInteger("1000000");
 	var numbers =[];
 	var current_num;
 
