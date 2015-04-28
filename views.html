@@ -1,0 +1,70 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module views</title>
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>views</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/root/PycharmProjects/AK/claster-prime-numbers/views.py">/root/PycharmProjects/AK/claster-prime-numbers/views.py</a></font></td></tr></table>
+    <p><tt>Модуль&nbsp;обробки&nbsp;запитів&nbsp;до&nbsp;серверу.</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-client"><strong>client</strong></a>()</dt></dl>
+ <dl><dt><a name="-index"><strong>index</strong></a>()</dt></dl>
+ <dl><dt><a name="-server"><strong>server</strong></a>()</dt><dd><tt>Обробка&nbsp;запитів&nbsp;від&nbsp;server.<br>
+:param&nbsp;GET<br>
+&nbsp;&nbsp;&nbsp;&nbsp;num&nbsp;-&nbsp;встановити&nbsp;нове&nbsp;число&nbsp;для&nbsp;пошуку.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:return&nbsp;ok<br>
+&nbsp;&nbsp;&nbsp;&nbsp;update&nbsp;-&nbsp;запит&nbsp;на&nbsp;оновлення&nbsp;вмісту&nbsp;сторінки<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:return&nbsp;список&nbsp;клієнтів&nbsp;і&nbsp;log<br>
+&nbsp;&nbsp;&nbsp;&nbsp;stop&nbsp;-&nbsp;зупинити&nbsp;пошук<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:return&nbsp;ok<br>
+інакше<br>
+&nbsp;&nbsp;&nbsp;&nbsp;:return:&nbsp;віддати&nbsp;server.html&nbsp;і&nbsp;поточний&nbsp;статус&nbsp;пошуку</tt></dd></dl>
+ <dl><dt><a name="-worker"><strong>worker</strong></a>()</dt><dd><tt>Обробка&nbsp;запитів&nbsp;від&nbsp;worker.<br>
+:param&nbsp;GET&nbsp;type:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;start&nbsp;-&nbsp;клієнт&nbsp;підключився<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:return&nbsp;id&nbsp;клієнта<br>
+&nbsp;&nbsp;&nbsp;&nbsp;get_work&nbsp;-&nbsp;клієнт&nbsp;просить&nbsp;роботу<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;якщо&nbsp;пошук&nbsp;запущений<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:return&nbsp;див.&nbsp;p_server.get_work<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;інакше<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:return&nbsp;no_work<br>
+&nbsp;&nbsp;&nbsp;&nbsp;find&nbsp;-&nbsp;клієнт&nbsp;знайшов&nbsp;просте&nbsp;число;&nbsp;якщо&nbsp;сесії&nbsp;співпали,&nbsp;зупиняємо&nbsp;пошук<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;якщо&nbsp;сервер&nbsp;працював&nbsp;і&nbsp;сесії&nbsp;співпадають<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:return&nbsp;ok<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;інакше<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:return&nbsp;error<br>
+&nbsp;&nbsp;&nbsp;&nbsp;check&nbsp;-&nbsp;прогрес&nbsp;клієнта<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;якщо&nbsp;пошук&nbsp;запущений&nbsp;і&nbsp;сесії&nbsp;співпадають<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:return&nbsp;ok<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;інакше<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:return&nbsp;error<br>
+&nbsp;&nbsp;&nbsp;&nbsp;online&nbsp;-&nbsp;клієнт&nbsp;активний&nbsp;(не&nbsp;відключився)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Якщо&nbsp;клієнт&nbsp;є&nbsp;в&nbsp;списку&nbsp;клієнтів<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:return&nbsp;ok<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;інакше<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:return&nbsp;error<br>
+&nbsp;&nbsp;&nbsp;&nbsp;stop&nbsp;-&nbsp;відключення&nbsp;клієнта<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:return&nbsp;ok<br>
+інакше<br>
+&nbsp;&nbsp;&nbsp;&nbsp;:return:&nbsp;error</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>app</strong> = &lt;Flask 'views'&gt;<br>
+<strong>request</strong> = &lt;LocalProxy unbound&gt;<br>
+<strong>serv</strong> = &lt;p_server.PServer instance&gt;</td></tr></table>
+</body></html>

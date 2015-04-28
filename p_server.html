@@ -1,0 +1,112 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module p_server</title>
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>p_server</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/root/PycharmProjects/AK/claster-prime-numbers/p_server.py">/root/PycharmProjects/AK/claster-prime-numbers/p_server.py</a></font></td></tr></table>
+    <p><tt>Модуль&nbsp;для&nbsp;організації&nbsp;пошуку&nbsp;наступного&nbsp;простого&nbsp;числа.</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="random.html">random</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="p_server.html#PServer">PServer</a>
+</font></dt></dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="PServer">class <strong>PServer</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Клас&nbsp;для&nbsp;організації&nbsp;пошуку&nbsp;наступного&nbsp;простого&nbsp;числа.<br>
+:param&nbsp;clients&nbsp;-&nbsp;словник&nbsp;клієнтів;&nbsp;key&nbsp;-&nbsp;номер&nbsp;клієнта,&nbsp;value&nbsp;-&nbsp;різні&nbsp;параметри&nbsp;клієнта<br>
+:param&nbsp;num&nbsp;-&nbsp;задане&nbsp;число,&nbsp;звідки&nbsp;починається&nbsp;пошук<br>
+:param&nbsp;current_num&nbsp;-&nbsp;число,&nbsp;з&nbsp;якого&nbsp;новий&nbsp;клієнт&nbsp;буде&nbsp;починати&nbsp;пошук<br>
+:param&nbsp;search&nbsp;-&nbsp;статус&nbsp;пошуку:&nbsp;true&nbsp;-&nbsp;здійснюється&nbsp;пошук;&nbsp;false&nbsp;-&nbsp;пошук&nbsp;зупинений<br>
+:param&nbsp;prime&nbsp;-&nbsp;тут&nbsp;буде&nbsp;зберігатись&nbsp;знайдене&nbsp;просте&nbsp;число<br>
+:param&nbsp;session&nbsp;-&nbsp;унікальний&nbsp;ключ&nbsp;для&nbsp;ідентифікації&nbsp;пошуку<br>
+:param&nbsp;timeout&nbsp;-&nbsp;к-сть&nbsp;секунд,&nbsp;після&nbsp;яких&nbsp;неактивні&nbsp;клієнти&nbsp;відключаються<br>
+:param&nbsp;stopped&nbsp;-&nbsp;масив,&nbsp;який&nbsp;складається&nbsp;із&nbsp;зупинених&nbsp;частин&nbsp;пошуку<br>
+:param&nbsp;log&nbsp;-&nbsp;журнал&nbsp;пошуку<br>
+:param&nbsp;time&nbsp;-&nbsp;час&nbsp;початку&nbsp;пошуку<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="PServer-__init__"><strong>__init__</strong></a>(self)</dt><dd><tt>Ініціалізація&nbsp;полів&nbsp;класу</tt></dd></dl>
+
+<dl><dt><a name="PServer-add_client"><strong>add_client</strong></a>(self, ip)</dt><dd><tt>Додати&nbsp;нового&nbsp;клієнта.<br>
+:param&nbsp;ip&nbsp;-&nbsp;ip-адреса&nbsp;клієнта<br>
+:return&nbsp;id&nbsp;-&nbsp;номер&nbsp;клієнта</tt></dd></dl>
+
+<dl><dt><a name="PServer-add_log"><strong>add_log</strong></a>(self, info)</dt><dd><tt>Додавання&nbsp;запису&nbsp;в&nbsp;журнал<br>
+:param&nbsp;info&nbsp;рядок,&nbsp;який&nbsp;потрібно&nbsp;додати&nbsp;у&nbsp;журнал</tt></dd></dl>
+
+<dl><dt><a name="PServer-check_client"><strong>check_client</strong></a>(self, parameters)</dt><dd><tt>Вивід&nbsp;статусу&nbsp;виконання&nbsp;пошуку&nbsp;клієнтом<br>
+:param&nbsp;parameters&nbsp;-&nbsp;параметри&nbsp;клієнта<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;-&nbsp;номер&nbsp;клієнта<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i&nbsp;-&nbsp;номер&nbsp;числа,&nbsp;яке&nbsp;перевіряється&nbsp;max=count<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count&nbsp;-&nbsp;к-сть&nbsp;числе,&nbsp;що&nbsp;перевіряються<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iteration&nbsp;-&nbsp;поточний&nbsp;дільник<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;current_num&nbsp;-&nbsp;поточне&nbsp;число<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not_prime&nbsp;-&nbsp;якщо&nbsp;true,&nbsp;current_num&nbsp;ділиться&nbsp;націло&nbsp;на&nbsp;iteration</tt></dd></dl>
+
+<dl><dt><a name="PServer-check_clients"><strong>check_clients</strong></a>(self)</dt><dd><tt>Перевіряє&nbsp;активність&nbsp;клієнтів.&nbsp;Якщо&nbsp;якийсь&nbsp;клієн&nbsp;не&nbsp;відправляв&nbsp;запит&nbsp;online&nbsp;на<br>
+протязі&nbsp;останніх&nbsp;self.<strong>timeout</strong>&nbsp;секунд,&nbsp;він&nbsp;відключається</tt></dd></dl>
+
+<dl><dt><a name="PServer-find"><strong>find</strong></a>(self, id, prime)</dt><dd><tt>Зупиняє&nbsp;пошук,&nbsp;встановлює&nbsp;знайдене&nbsp;просте&nbsp;число,&nbsp;вираховує&nbsp;час&nbsp;пошуку<br>
+:param&nbsp;id&nbsp;-&nbsp;номер&nbsp;клієнта<br>
+:param&nbsp;prime&nbsp;-&nbsp;знайдене&nbsp;просте&nbsp;число</tt></dd></dl>
+
+<dl><dt><a name="PServer-get_work"><strong>get_work</strong></a>(self, id)</dt><dd><tt>Видає&nbsp;роботу&nbsp;клієнту.<br>
+Якщо&nbsp;масив&nbsp;stopped&nbsp;не&nbsp;пустий&nbsp;(є&nbsp;зупинені&nbsp;частини&nbsp;пошуку)&nbsp;віддаємо&nbsp;цю&nbsp;частину&nbsp;клієнту<br>
+&nbsp;&nbsp;&nbsp;&nbsp;data<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count_num&nbsp;-&nbsp;к-сть&nbsp;чисел&nbsp;для&nbsp;пошуку<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start_num&nbsp;-&nbsp;початкове&nbsp;число<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i&nbsp;-&nbsp;позиція&nbsp;числа,з&nbsp;якого&nbsp;потрібно&nbsp;продовжити&nbsp;пошук<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iteration&nbsp;-&nbsp;число,&nbsp;на&nbsp;яке&nbsp;потрібно&nbsp;почати&nbsp;ділити&nbsp;поточне&nbsp;число<br>
+&nbsp;&nbsp;&nbsp;&nbsp;stopped&nbsp;-&nbsp;True,&nbsp;зупинена&nbsp;частина<br>
+інакше<br>
+&nbsp;&nbsp;&nbsp;&nbsp;data<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count_num&nbsp;-&nbsp;к-сть&nbsp;чисел&nbsp;для&nbsp;пошуку<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start_num&nbsp;-&nbsp;початкове&nbsp;число<br>
+&nbsp;&nbsp;&nbsp;&nbsp;stopped&nbsp;-&nbsp;False,&nbsp;новий&nbsp;пошук<br>
+:param&nbsp;id&nbsp;-&nbsp;номер&nbsp;клієнта<br>
+:return&nbsp;session&nbsp;-&nbsp;сесія<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stopped&nbsp;-&nbsp;тип&nbsp;пошуку<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data&nbsp;-&nbsp;дані&nbsp;пошуку</tt></dd></dl>
+
+<dl><dt><a name="PServer-online_client"><strong>online_client</strong></a>(self, id)</dt><dd><tt>Встановити&nbsp;час&nbsp;останньої&nbsp;активності&nbsp;клієнта<br>
+:param&nbsp;id&nbsp;-&nbsp;номер&nbsp;клієнта<br>
+:return&nbsp;True&nbsp;-&nbsp;клієнт&nbsp;з&nbsp;таким&nbsp;id&nbsp;існує<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;False&nbsp;-&nbsp;клієнта&nbsp;з&nbsp;таким&nbsp;id&nbsp;не&nbsp;існує</tt></dd></dl>
+
+<dl><dt><a name="PServer-server_update"><strong>server_update</strong></a>(self)</dt><dd><tt>Запускає&nbsp;перевірку&nbsp;активності&nbsp;клієнтів.<br>
+:return:&nbsp;список&nbsp;клієнтів&nbsp;clients;&nbsp;журнал&nbsp;log;&nbsp;просте&nbsp;число&nbsp;prime,&nbsp;якщо&nbsp;воно&nbsp;вже&nbsp;знайдене</tt></dd></dl>
+
+<dl><dt><a name="PServer-set_num"><strong>set_num</strong></a>(self, num)</dt><dd><tt>Якщо&nbsp;num&nbsp;-&nbsp;парне,&nbsp;додати&nbsp;до&nbsp;нього&nbsp;1<br>
+Запускає&nbsp;пошук&nbsp;наступного&nbsp;простого&nbsp;числа&nbsp;за&nbsp;числом&nbsp;num;<br>
+self.<strong>session</strong>&nbsp;присвоюється&nbsp;випадкове&nbsp;значення&nbsp;із&nbsp;32&nbsp;біт&nbsp;для&nbsp;ідентифікації&nbsp;поточного&nbsp;пошуку<br>
+:param&nbsp;num&nbsp;-&nbsp;число,&nbsp;з&nbsp;якого&nbsp;починається&nbsp;пошук</tt></dd></dl>
+
+<dl><dt><a name="PServer-stop_client"><strong>stop_client</strong></a>(self, id)</dt><dd><tt>Видаляє&nbsp;клієнта&nbsp;з&nbsp;номером&nbsp;id.&nbsp;Задачу,&nbsp;яку&nbsp;виконував&nbsp;клієнт&nbsp;додаємо<br>
+в&nbsp;масив&nbsp;stopped,&nbsp;для&nbsp;подальшої&nbsp;передачі&nbsp;її&nbsp;іншому&nbsp;клієнту.<br>
+:param&nbsp;id:&nbsp;номер&nbsp;клієнта</tt></dd></dl>
+
+</td></tr></table></td></tr></table>
+</body></html>

@@ -90,6 +90,27 @@ class PServer():
                 del self.clients[i]["start_num"]
         self.add_log(u"Час виконання: %s" % str(datetime.now() - self.time))
         self.time = 0
+        """
+        if self.prime == 0:
+            self.prime = prime
+        else:
+
+        self.add_log(u"Клієнт №%d знайшов просте число: %s" % (id, prime))
+
+        num = self.clients[str(id)]["start_num"]
+        for i in self.clients:
+            if self.clients[i]["start_num"] < num:
+
+                break;
+        self.search = False
+
+        for i in self.clients:
+            if self.clients[i]["start_num"]:
+                del self.clients[i]["start_num"]
+        self.add_log(u"Час виконання: %s" % str(datetime.now() - self.time))
+        self.time = 0
+        """
+
 
 
     def get_work(self, id):
@@ -226,6 +247,6 @@ class PServer():
         """
         self.check_clients()
         res = {"clients": self.clients, "log": self.log}
-        if self.prime != 0:
+        if self.prime != 0 and self.search == False:
             res["prime"] = self.prime
         return res
