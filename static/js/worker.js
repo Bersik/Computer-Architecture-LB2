@@ -13,12 +13,12 @@ onmessage = function (event) {
 	var data = event.data;
 	switch (data){
 		case 'start':
-			importScripts("biginteger.js");
-			xmlhttp = getXmlHttp();
-			setTimeout(start,100);
-			break;
+		importScripts("biginteger.js");
+		xmlhttp = getXmlHttp();
+		setTimeout(start,100);
+		break;
 		default:
-			break;
+		break;
 	}
 };
 
@@ -47,17 +47,21 @@ function get_work(){
 	if (xmlhttp.status == 200){
 		if (xmlhttp.responseText != 'no_work'){
 			param = JSON.parse(xmlhttp.responseText);
-			start_num = BigInteger(param["num"])
-			end_num = BigInteger(start_num.add(BigInteger(param["count_num"]-1)))
+			param_data = param.data
+			start_num = BigInteger(param_data["start_num"])
 			session = param["session"]
+			end_num = BigInteger(start_num.add(BigInteger(param_data["count_num"]-1)))
 			postMessage({
-				"messageType":"get_work",
-				"work":true,
-				"num_start":param["num"],
-				"num_end":BigInteger.toString(end_num),
-				"session":session,
-			});
-			work();
+					"messageType":"get_work",
+					"work":true,
+					"num_start":param_data["start_num"],
+					"num_end":BigInteger.toString(end_num),
+					"session":session,
+				});
+			if (param["stopped"] == true)
+				work(param_data);
+			else
+				work();
 			return;
 		}
 		else{
@@ -83,10 +87,11 @@ function send_test(val){
 	});
 }
 
-function work(){
+function work(param){
 	var send_count_iterations = BigInteger("100000");
 	var numbers =[];
 	var current_num;
+
 	for(current_num=start_num;current_num.compare(end_num)==-1;){
 		numbers.push(current_num);
 		current_num = current_num.add(2);
@@ -95,10 +100,17 @@ function work(){
 	if (current_num.compare(BigInteger(9007199254))==-1){
 		send_count_iterations = BigInteger(Math.sqrt(BigInteger.toString(current_num)))
 	}
-
+	var i=0;
 	var BigTwo = BigInteger(2);
-	for(var i=0;i<numbers.length;i++){
-		var k = BigInteger(3);
+	var k = BigInteger(3);
+
+	if (param!= undefined){
+		i = param["i"]-1;
+		k = BigInteger(param["iteration"]);
+	}
+
+	for(;i<numbers.length;i++){
+		
 		var k_end;
 		var current_num = numbers[i];
 		var not_prime=false;
@@ -158,6 +170,7 @@ function work(){
 				send_connection_error();
 			return;
 		}
+		k = BigInteger(3);
 	}
 	setTimeout(get_work,2000);
 }
