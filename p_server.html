@@ -1,7 +1,6 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html><head><title>Python: module p_server</title>
-    <meta charset="UTF-8">
 </head><body bgcolor="#f0f0f8">
 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
@@ -58,14 +57,9 @@
 <dl><dt><a name="PServer-add_log"><strong>add_log</strong></a>(self, info)</dt><dd><tt>Додавання&nbsp;запису&nbsp;в&nbsp;журнал<br>
 :param&nbsp;info&nbsp;рядок,&nbsp;який&nbsp;потрібно&nbsp;додати&nbsp;у&nbsp;журнал</tt></dd></dl>
 
-<dl><dt><a name="PServer-check_client"><strong>check_client</strong></a>(self, parameters)</dt><dd><tt>Вивід&nbsp;статусу&nbsp;виконання&nbsp;пошуку&nbsp;клієнтом<br>
+<dl><dt><a name="PServer-check_client"><strong>check_client</strong></a>(self, parameters)</dt><dd><tt>Клієнт&nbsp;виконав&nbsp;завдання&nbsp;і&nbsp;не&nbsp;знайшов&nbsp;просто&nbsp;числа<br>
 :param&nbsp;parameters&nbsp;-&nbsp;параметри&nbsp;клієнта<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;-&nbsp;номер&nbsp;клієнта<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i&nbsp;-&nbsp;номер&nbsp;числа,&nbsp;яке&nbsp;перевіряється&nbsp;max=count<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count&nbsp;-&nbsp;к-сть&nbsp;числе,&nbsp;що&nbsp;перевіряються<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iteration&nbsp;-&nbsp;поточний&nbsp;дільник<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;current_num&nbsp;-&nbsp;поточне&nbsp;число<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not_prime&nbsp;-&nbsp;якщо&nbsp;true,&nbsp;current_num&nbsp;ділиться&nbsp;націло&nbsp;на&nbsp;iteration</tt></dd></dl>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;-&nbsp;номер&nbsp;клієнта</tt></dd></dl>
 
 <dl><dt><a name="PServer-check_clients"><strong>check_clients</strong></a>(self)</dt><dd><tt>Перевіряє&nbsp;активність&nbsp;клієнтів.&nbsp;Якщо&nbsp;якийсь&nbsp;клієн&nbsp;не&nbsp;відправляв&nbsp;запит&nbsp;online&nbsp;на<br>
 протязі&nbsp;останніх&nbsp;self.<strong>timeout</strong>&nbsp;секунд,&nbsp;він&nbsp;відключається</tt></dd></dl>
@@ -74,23 +68,17 @@
 :param&nbsp;id&nbsp;-&nbsp;номер&nbsp;клієнта<br>
 :param&nbsp;prime&nbsp;-&nbsp;знайдене&nbsp;просте&nbsp;число</tt></dd></dl>
 
+<dl><dt><a name="PServer-get_random"><strong>get_random</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="PServer-get_work"><strong>get_work</strong></a>(self, id)</dt><dd><tt>Видає&nbsp;роботу&nbsp;клієнту.<br>
 Якщо&nbsp;масив&nbsp;stopped&nbsp;не&nbsp;пустий&nbsp;(є&nbsp;зупинені&nbsp;частини&nbsp;пошуку)&nbsp;віддаємо&nbsp;цю&nbsp;частину&nbsp;клієнту<br>
-&nbsp;&nbsp;&nbsp;&nbsp;data<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count_num&nbsp;-&nbsp;к-сть&nbsp;чисел&nbsp;для&nbsp;пошуку<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start_num&nbsp;-&nbsp;початкове&nbsp;число<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i&nbsp;-&nbsp;позиція&nbsp;числа,з&nbsp;якого&nbsp;потрібно&nbsp;продовжити&nbsp;пошук<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iteration&nbsp;-&nbsp;число,&nbsp;на&nbsp;яке&nbsp;потрібно&nbsp;почати&nbsp;ділити&nbsp;поточне&nbsp;число<br>
-&nbsp;&nbsp;&nbsp;&nbsp;stopped&nbsp;-&nbsp;True,&nbsp;зупинена&nbsp;частина<br>
-інакше<br>
-&nbsp;&nbsp;&nbsp;&nbsp;data<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count_num&nbsp;-&nbsp;к-сть&nbsp;чисел&nbsp;для&nbsp;пошуку<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start_num&nbsp;-&nbsp;початкове&nbsp;число<br>
-&nbsp;&nbsp;&nbsp;&nbsp;stopped&nbsp;-&nbsp;False,&nbsp;новий&nbsp;пошук<br>
+інакше&nbsp;віддаємо&nbsp;нову&nbsp;частину.<br>
+&nbsp;<br>
 :param&nbsp;id&nbsp;-&nbsp;номер&nbsp;клієнта<br>
 :return&nbsp;session&nbsp;-&nbsp;сесія<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stopped&nbsp;-&nbsp;тип&nbsp;пошуку<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data&nbsp;-&nbsp;дані&nbsp;пошуку</tt></dd></dl>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data&nbsp;-&nbsp;дані&nbsp;пошуку<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count_num&nbsp;-&nbsp;к-сть&nbsp;чисел&nbsp;для&nbsp;пошуку<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start_num&nbsp;-&nbsp;початкове&nbsp;число</tt></dd></dl>
 
 <dl><dt><a name="PServer-online_client"><strong>online_client</strong></a>(self, id)</dt><dd><tt>Встановити&nbsp;час&nbsp;останньої&nbsp;активності&nbsp;клієнта<br>
 :param&nbsp;id&nbsp;-&nbsp;номер&nbsp;клієнта<br>

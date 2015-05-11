@@ -72,6 +72,7 @@ function change_content_start(){
 function change_content_stop(){
 	obj_button.disabled = false;
 	worked_working = false;
+	obj_id.innerHTML = "-";
 	obj_button.innerHTML="Підключитись";
 	clearInterval(timer_online);
 }

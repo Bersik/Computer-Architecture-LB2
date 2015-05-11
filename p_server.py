@@ -123,25 +123,17 @@ class PServer():
         """
         Видає роботу клієнту.
         Якщо масив stopped не пустий (є зупинені частини пошуку) віддаємо цю частину клієнту
-            data
-                count_num - к-сть чисел для пошуку
-                start_num - початкове число
-                i - позиція числа,з якого потрібно продовжити пошук
-                iteration - число, на яке потрібно почати ділити поточне число
-            stopped - True, зупинена частина
-        інакше
-            data
-                count_num - к-сть чисел для пошуку
-                start_num - початкове число
-            stopped - False, новий пошук
+        інакше віддаємо нову частину.
+
         :param id - номер клієнта
         :return session - сесія
-                stopped - тип пошуку
                 data - дані пошуку
+                    count_num - к-сть чисел для пошуку
+                    start_num - початкове число
         """
         self.check_clients()
         id = int(id)
-        ret = {"session": self.session, "stopped": False}
+        ret = {"session": self.session}
         if len(self.stopped) > 0:
             self.clients[id]["start_num"] = self.stopped[0]
             self.add_log(u"Клієнт №%d отримав відмінену задачу %s" % (id, self.stopped[0]))
@@ -185,8 +177,6 @@ class PServer():
         Клієнт виконав завдання і не знайшов просто числа
         :param parameters - параметри клієнта
                     id - номер клієнта
-                    count - к-сть числе, що перевіряються
-                    current_num - поточне число
         """
         id = int(parameters.get("id"))
         num = long(self.clients[id]["start_num"])
