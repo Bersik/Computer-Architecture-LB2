@@ -7,7 +7,7 @@
 	margin: 30px auto;
 	padding: 10px 20px;
 	padding-bottom: 20px;
-	width: 800px;
+	width: 80%;
 	text-align: center;
 	
 	border: 1px solid #625B64;
@@ -21,7 +21,6 @@ h1{
 #status{
 	background-color: #f7f7f7;
 	height: 200px;
-	/*width: 500px;*/
 	border: 1px solid #d8d8d8;
 	margin: 0 5%;
 	overflow: scroll;
@@ -36,6 +35,12 @@ h1{
 
 .text_num{
 	display: inline-block;
+}
+
+#num{
+	margin-bottom: 20px;
+	width: 70%;
+	height: 150px;
 }
 
 #button_con{

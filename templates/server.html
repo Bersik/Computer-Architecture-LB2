@@ -2,6 +2,7 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache">
     <title>Server</title>
     <link rel="stylesheet" type="text/css" href="../static/css/server.css">
     <script type="text/javascript" src="../static/js/server.js"></script>
@@ -11,8 +12,11 @@
     	<h1>Сервер</h1>
     	<hr/>
     	<div id="num">
-    		Число:
-    		<input type="number" id="number" value="3254354654765735" min="2" step="1">
+    		Задане число
+            <br>
+            <textarea id="number">{{ start_num }}</textarea>
+            <br>
+            <button id="get_random" onclick="get_random();">Випадкове число</button>
     		<button id="button_search" onclick="search();" >{% if search %}Зупинити{% else %}Пошук{% endif %}</button>
     	</div>
     	<br/>
@@ -25,6 +29,11 @@
     	Status
     	<div id="status">
     	</div>
+        <br>
+        Просте число
+        <br>
+        <textarea readonly id="prime_num">
+        </textarea>
     	
     </div>
 </body>

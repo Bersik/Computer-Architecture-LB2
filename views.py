@@ -42,7 +42,13 @@ def server():
     if request.args.get("stop"):
         serv.search = False
         return "ok"
-    return render_template("server.html", search=serv.search)
+
+    if request.args.get("get_random"):
+        if not serv.search:
+            return str(serv.get_random())
+        else:
+            return ""
+    return render_template("server.html", search=serv.search, start_num=str(serv.num))
 
 
 @app.route('/client', methods=['GET'])

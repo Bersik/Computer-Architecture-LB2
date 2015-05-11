@@ -19,7 +19,7 @@ function check_support_worker(){
 
 function add_status(str){
 	obj_status.innerHTML += str+"<br/>";
-	obj_status.scrollTop = obj_status.scrollHeight;
+	//obj_status.scrollTop = obj_status.scrollHeight;
 }
 
 function launch_worker(){
@@ -40,21 +40,13 @@ function launch_worker(){
     		case 'get_work':
     			if (data.work == true){
     				obj_num.innerHTML = data.num_start;
-    				add_status("Запустив пошук. Початкове число - " +data.num_start+". Кінцеве число - " +data.num_end+ ". Сессія - "+data.session+".");
+    				add_status("Починаю перевірку: початкове число - " +data.num_start+". Кінцеве число - " +data.num_end+ ". Сессія - "+data.session+".");
     			}
-    			else{
+    			else
     				add_status("Роботи немає. Очікую...");
-    			}
     			break;
-    		case 'began_to_check':
-    			add_status("Починаю перевіряти число "+data.current_num+" ("+data.current_i+"/"+data.len+").");
-    			break;
-    		case 'progress':
-    			if (data.not_prime){
-    				add_status("Число "+data.current_num+" складене. Ділиться на "+data.iteration+".");
-    			}else{
-    				add_status("Продовжую перевіряти число "+data.current_num+". Зараз ділю на "+data.iteration+".");
-    			}
+    		case 'end_to_check':
+    			add_status("Закінчив поточну перевірку.");
     			break;
     		case 'result':
     			add_status("Я знайшов просте число! Це " + data.current_num+".");
@@ -91,7 +83,7 @@ function button_con(){
     	if (check_support_worker() == false)
     		return;
 		launch_worker();
-		setTimeout(function (){ obj_button.disabled = false; },5)
+		setTimeout(function (){ obj_button.disabled = false; },5);
 	}else{
 		worker.terminate();
 		xmlhttp = new XMLHttpRequest();

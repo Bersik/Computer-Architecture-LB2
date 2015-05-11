@@ -7,7 +7,7 @@
 	margin: 30px auto;
 	padding: 10px 20px;
 	padding-bottom: 20px;
-	width: 800px;
+	width: 80%;
 	text-align: center;
 	
 	border: 1px solid #625B64;
@@ -20,13 +20,19 @@ h1{
 
 #clients{
 	margin-top: 5px;
-	width: 500px;
+	overflow: scroll;
+	width: 70%;
+}
+
+#get_random{
+	margin-right: -120px;
+	position: relative;
+	left: -300px;
 }
 
 #status{
 	background-color: #f7f7f7;
 	height: 200px;
-	
 	border: 1px solid #d8d8d8;
 	margin: 5px 5%;
 	overflow: scroll;
@@ -39,6 +45,11 @@ h1{
 	margin-top: 10px;
 }
 
+#number{
+	height: 150px;
+	width: 80%;
+}
+
 .text{
 	margin: 10px auto;
 }
@@ -49,4 +60,9 @@ h1{
 
 #button_con{
 	margin-top: 20px;
+}
+
+#prime_num{
+	height: 150px;
+	width: 80%;	
 }

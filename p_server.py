@@ -5,7 +5,6 @@
 import random
 from datetime import datetime
 
-
 class PServer():
     """
     Клас для організації пошуку наступного простого числа.
@@ -26,16 +25,22 @@ class PServer():
         Ініціалізація полів класу
         """
         self.clients = dict()
-        self.num = 0
+        self.num = self.get_random()
         self.current_num = 0
         self.search = False
-        self.count_num = 20
+        self.count_num = 100
         self.prime = 0
         self.session = 0
         self.timeout = 20
         self.stopped = []
         self.log = []
         self.time = 0
+
+
+    def get_random(self):
+        count = random.randint(1000, 3000)
+        self.num=random.getrandbits(count)
+        return self.num
 
     def add_log(self, info):
         """
@@ -54,7 +59,7 @@ class PServer():
         self.num = long(num)
         self.current_num = self.num + 1
         if self.current_num % 2 == 0:
-            self.current_num = self.current_num + 1
+            self.current_num += 1
         self.search = True
         self.prime = 0
         self.session = "%x" % random.getrandbits(32)
@@ -76,6 +81,7 @@ class PServer():
         self.add_log(u"Підключився новий клієнт: id:%d; ip:%s" % (id, str(ip)))
         return id
 
+#-------------------------------------------------------------------------------------------
     def find(self, id, prime):
         """
         Зупиняє пошук, встановлює знайдене просте число, вираховує час пошуку
@@ -112,7 +118,7 @@ class PServer():
         """
 
 
-
+#-------------------------------------------------------------------------------------------+++++++++++
     def get_work(self, id):
         """
         Видає роботу клієнту.
@@ -137,25 +143,14 @@ class PServer():
         id = int(id)
         ret = {"session": self.session, "stopped": False}
         if len(self.stopped) > 0:
-            if type(self.stopped[0]) is not str:
-                self.clients[id].update(self.stopped[0])
-                self.add_log(
-                    u"Клієнт №%d отримав відмінену задачу. Початкове число: %s" % (id, self.stopped[0]["start_num"]))
-                self.stopped.remove(self.stopped[0])
-                client = self.clients[id]
-                ret["stopped"] = True
-                ret["data"] = {"count_num": self.count_num, "start_num": client["start_num"], "i": client["i"],
-                               "iteration": client["iteration"]}
-            else:
-                self.clients[id]["start_num"] = self.stopped[0]
-                self.add_log(u"Клієнт №%d отримав відмінену задачу. Початкове число: %s" % (id, self.stopped[0]))
-                self.stopped.remove(self.stopped[0])
-                ret["data"] = {"start_num": str(self.clients[id]["start_num"]), "count_num": self.count_num}
+            self.clients[id]["start_num"] = self.stopped[0]
+            self.add_log(u"Клієнт №%d отримав відмінену задачу %s" % (id, self.stopped[0]))
+            self.stopped.remove(self.stopped[0])
         else:
             self.clients[id]["start_num"] = str(self.current_num)
             self.add_log(u"Клієнт №%d отримав задачу. Початкове число: %s" % (id, str(self.current_num)))
             self.current_num += self.count_num
-            ret["data"] = {"start_num": str(self.clients[id]["start_num"]), "count_num": self.count_num}
+        ret["data"] = {"start_num": str(self.clients[id]["start_num"]), "count_num": self.count_num}
         return ret
 
     def check_clients(self):
@@ -184,35 +179,19 @@ class PServer():
             return True
         return False
 
+#-----------------------------------------------------------
     def check_client(self, parameters):
         """
-        Вивід статусу виконання пошуку клієнтом
+        Клієнт виконав завдання і не знайшов просто числа
         :param parameters - параметри клієнта
                     id - номер клієнта
-                    i - номер числа, яке перевіряється max=count
                     count - к-сть числе, що перевіряються
-                    iteration - поточний дільник
                     current_num - поточне число
-                    not_prime - якщо true, current_num ділиться націло на iteration
         """
         id = int(parameters.get("id"))
-        i = parameters.get("i")
-        count = parameters.get("count")
-        iteration = parameters.get("iteration")
-        current_num = parameters.get("current_num")
-        not_prime = parameters.get("not_prime")
-
-        self.clients[id]["i"] = i
-        self.clients[id]["count"] = count
-        self.clients[id]["iteration"] = iteration
-        self.clients[id]["current_num"] = current_num
-        self.clients[id]["not_prime"] = not_prime
-        if not_prime == "true":
-            self.add_log(u"Клієнт №%d перевірив число %s (%s/%s). Воно складене, ділиться на %s" % (
-                id, current_num, i, count, iteration))
-        else:
-            self.add_log(
-                u"Клієнт №%d перевіряє число %s (%s/%s). Зараз ділить на %s" % (id, current_num, i, count, iteration))
+        num = long(self.clients[id]["start_num"])
+        self.add_log(u"Клієнт №%d перевірив числа (%d - %d). Просте число не знайдене." % (
+            id, num, num+self.count_num))
 
 
     def stop_client(self, id):
@@ -222,23 +201,11 @@ class PServer():
         :param id: номер клієнта
         """
         id = int(id)
-        if self.clients[id].get("start_num"):
-            client = self.clients[id]
-            if client.get("i") is not None and client.get("count") is not None and client.get("not_prime") is not None:
-                if (client.get("not_prime") == 'true' and client.get("i") != client.get("count")
-                    or
-                        (client.get("not_prime") == 'false')):
-                    self.stopped.append({
-                        "start_num": client.get("start_num"),
-                        "i": client.get("i"),
-                        "count": client.get("count"),
-                        "iteration": client.get("iteration"),
-                        "current_num": client.get("current_num")
-                    })
-            else:
-                self.stopped.append(client.get("start_num"))
+        num = self.clients[id].get("start_num")
+        if num:
+            self.stopped.append(num)
         del self.clients[id]
-        self.add_log(u"Клієнт №%d відключився. " % id)
+        self.add_log(u"Клієнт №%d відключився. Його задачу (%s) додано до списку відменених." % (id,num))
 
     def server_update(self):
         """
