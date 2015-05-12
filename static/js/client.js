@@ -40,7 +40,7 @@ function launch_worker(){
     		case 'get_work':
     			if (data.work == true){
     				obj_num.innerHTML = data.num_start;
-    				add_status("Починаю перевірку: початкове число - " +data.num_start+". Кінцеве число - " +data.num_end+ ". Сессія - "+data.session+".");
+    				add_status("Починаю перевірку: початкове число - " +data.num_start+". Кінцеве число - " +data.num_end+ ". Сесія - "+data.session+".");
     			}
     			else
     				add_status("Роботи немає. Очікую...");

@@ -70,12 +70,6 @@ class ClasterPrimeNumbers(unittest.TestCase):
 
         self.assertEquals(server.find_element_by_id("prime_num").text,"3992231807651010719611701868170507840025756582038953431446593124078648458199433073539376500971851906781588991003629587619911039778685705821334278508904893584468541826398138785947180623869682877751850248141344726228258117849171313709176179967369283780768725707282276724692940460895613262255627765652767")
 
-        # elem = driver.find_element_by_name("q")
-        # elem.send_keys("pycon")
-        #elem.send_keys(Keys.RETURN)
-        #assert "No results found." not in driver.page_source
-
-
     def tearDown(self):
         self.server.close()
         self.client1.close()
